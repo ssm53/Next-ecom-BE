@@ -6,8 +6,6 @@ import bcrypt from "bcryptjs";
 import { signAccessToken } from "./src/utils/jwt.js";
 import { filter } from "./src/utils/common.js";
 
-// DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
-
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -92,18 +90,25 @@ function validateLogin(input) {
 
   if (!("email" in input) || input["email"].length == 0) {
     validationErrors["email"] = "cannot be blank";
+  } else {
+    if (
+      "email" in input &&
+      !input["email"].match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
+    ) {
+      validationErrors["email"] = "is invalid";
+    }
   }
 
   if (!("password" in input) || input["password"].length == 0) {
     validationErrors["password"] = "cannot be blank";
   }
 
-  if (
-    "email" in input &&
-    !input["email"].match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
-  ) {
-    validationErrors["email"] = "is invalid";
-  }
+  // if (
+  //   "email" in input &&
+  //   !input["email"].match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
+  // ) {
+  //   validationErrors["email"] = "is invalid";
+  // }
 
   return validationErrors;
 }
