@@ -7,7 +7,6 @@ import { signAccessToken } from "./src/utils/jwt.js";
 import { filter } from "./src/utils/common.js";
 
 const app = express();
-const port = process.env.PORT || 8080;
 
 app.use(cors()); // Use the cors middleware to allow cross-origin requests
 app.use(express.json()); // Add this middleware to parse JSON in request bodies
@@ -52,10 +51,10 @@ function validateUser(input) {
   return validationErrors;
 }
 
-app.get("/", async (req, res) => {
-  const allUsers = await prisma.user.findMany();
-  res.json(allUsers);
-});
+// app.get("/", async (req, res) => {
+//   const allUsers = await prisma.user.findMany();
+//   res.json(allUsers);
+// });
 
 app.post("/users", async (req, res) => {
   const data = req.body;
@@ -153,6 +152,4 @@ app.post("/sign-in", async (req, res) => {
   return res.json({ accessToken, userId });
 });
 
-app.listen(port, () => {
-  console.log(`App started; listening on port ${port}`);
-});
+export default app;
