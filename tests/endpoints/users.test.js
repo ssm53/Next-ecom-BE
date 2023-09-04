@@ -1,4 +1,4 @@
-// status: unable to set up testing. cant connect to our localhost 5432 on my machine. So now, ive gone ahead and done refactoring. i will git commit, so if anything goes wrong, we can come back to this - commit name - just before refactoring
+// we're good to go!
 
 import { PrismaClient, Prisma } from "@prisma/client";
 import request from "supertest";
