@@ -2,10 +2,12 @@ import express from "express";
 import cors from "cors"; // Import the cors middleware
 import userRouter from "./src/controllers/users.controllers.js";
 import authRouter from "./src/controllers/auth.controllers.js";
+import morgan from "morgan";
 
 // import sgMail from "@sendgrid/mail";
 
 const app = express();
+app.use(morgan("combined"));
 app.use(cors()); // Use the cors middleware to allow cross-origin requests
 app.use(express.json()); // Add this middleware to parse JSON in request bodies
 app.use("/users", userRouter);
