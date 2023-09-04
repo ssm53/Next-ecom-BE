@@ -14,7 +14,7 @@ async function cleanupDatabase() {
 }
 
 // we're starting our testing for post/users.. we do this to test for correct deets.here we're giving it sample data
-describe("POST /sign-in", () => {
+describe("POST /auth", () => {
   const newUser = {
     // New user data to be used for sign-up
     name: "Usha",
@@ -40,7 +40,7 @@ describe("POST /sign-in", () => {
     expect(signUpResponse.statusCode).toBe(200);
 
     const signInResponse = await request(app)
-      .post("/sign-in")
+      .post("/auth")
       .send({
         email: newUser.email,
         password: newUser.password,
@@ -55,7 +55,7 @@ describe("POST /sign-in", () => {
   it("with wrong password should fail", async () => {
     newUser.password = "Bobbybrown99";
     const response = await request(app)
-      .post("/sign-in")
+      .post("/auth")
       .send({
         email: newUser.email,
         password: newUser.password,
@@ -71,7 +71,7 @@ describe("POST /sign-in", () => {
     newUser.email = "usha12@gmail.com";
     newUser.password = "Bobbybrown89";
     const response = await request(app)
-      .post("/sign-in")
+      .post("/auth")
       .send({
         email: newUser.email,
         password: newUser.password,
