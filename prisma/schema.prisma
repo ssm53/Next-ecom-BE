@@ -15,4 +15,16 @@ model User {
   name     String?
   email    String  @unique
   password String?
+  images   Image[] 
 }
+
+model Image {
+  id          Int     @id @default(autoincrement())
+  price       Int
+  title       String  
+  description String?
+  owner       User    @relation(fields: [ownerID], references: [id]) // Define the foreign key relationship
+  ownerID     Int     
+  
+}
+
