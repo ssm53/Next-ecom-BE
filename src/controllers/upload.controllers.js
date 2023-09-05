@@ -11,7 +11,6 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   const data = req.body;
-  console.log(req.user);
 
   const validationErrors = validateUpload(data);
 
