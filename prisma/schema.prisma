@@ -25,6 +25,6 @@ model Image {
   description String?
   owner       User    @relation(fields: [ownerID], references: [id]) // Define the foreign key relationship
   ownerID     Int     
-  
+  url         String? @unique
 }
 
