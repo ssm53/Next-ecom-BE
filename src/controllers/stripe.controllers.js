@@ -1,13 +1,13 @@
 import express from "express";
 // const app = express();
-import stripe from "stripe";
+import Stripe from "stripe";
 import { Prisma } from "@prisma/client";
 import prisma from "../utils/prisma.js";
 import { filter } from "../utils/common.js";
 
 const router = express.Router();
 
-const stripeInstance = stripe(
+const stripe = new Stripe(
   "sk_test_51NnLAPAKnGY6vzrgNETVXXtznJjh7nxMzjLQOXUJJS0wSsfphySF4cdHkgeUhjyf5EcLFoIymS45NAphBxXcTSqr00KXJ6OycN"
 );
 
