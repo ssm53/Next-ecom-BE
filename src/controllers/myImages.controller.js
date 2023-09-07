@@ -18,8 +18,11 @@ router.get("/", async (req, res) => {
       },
     });
 
+    const userid = myImages[0].ownerID;
+    console.log(userid);
+
     // Return the images as JSON response
-    return res.json({ myImages, user: userId }); // added user: for redirect
+    return res.json({ myImages, userid }); // added user: for redirect
   } catch (error) {
     // Handle errors and return an error response if needed
     console.error("Error retrieving images:", error);
