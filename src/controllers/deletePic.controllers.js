@@ -5,9 +5,19 @@ import auth from "../middlewares/auth.js"; // Import the auth middleware to ensu
 const router = express.Router();
 
 // Define the delete route
-router.delete("/", auth, async (req, res) => {
+router.delete("/", async (req, res) => {
   const { imageId } = req.params;
-  const userId = req.user.payload.id; // Get the ID of the authenticated user
+  console.log(imageId);
+  // const userId = req.user.payload.id; // Get the ID of the authenticated user
+
+  // // Use Prisma to find picture, so we can get userId
+  // const picture = await prisma.image.findUnique({
+  //   where: {
+  //     id: imageId,
+  //   },
+  // });
+  // const userId = picture.ownerID;
+  // console.log(userId);
 
   try {
     // Find the image by ID and ownerID (to ensure ownership)
@@ -17,6 +27,8 @@ router.delete("/", auth, async (req, res) => {
         ownerID: userId,
       },
     });
+
+    console.log(image);
 
     if (!image) {
       // If the image doesn't exist or doesn't belong to the user, return a 404 error

@@ -20,7 +20,7 @@ app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/upload", uploadRouter);
 app.use("/allPics", allPicsRouter);
-app.use("/deletePic", deletePicRouter);
+app.use("/deletePic/:imageId", deletePicRouter);
 app.use("/my-images/:userId", myImagesRouter);
 
 export default app;

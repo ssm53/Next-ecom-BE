@@ -19,7 +19,6 @@ router.get("/", async (req, res) => {
     });
 
     const userid = myImages[0].ownerID;
-    console.log(userid);
 
     // Return the images as JSON response
     return res.json({ myImages, userid }); // added user: for redirect
