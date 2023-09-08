@@ -7,6 +7,7 @@ import uploadRouter from "./src/controllers/upload.controllers.js";
 import allPicsRouter from "./src/controllers/allPics.controllers.js";
 import stripeRouter from "./src/controllers/stripe.controllers.js";
 // import deletePicRouter from "./src/controllers/deletePic.controllers.js";
+import authRefreshRouter from "./src/controllers/authRefresh.controllers.js";
 import myImagesRouter from "./src/controllers/myImages.controller.js";
 import morgan from "morgan";
 import auth from "./src/middlewares/auth.js"; // tesing DELETE
@@ -23,6 +24,7 @@ app.use("/upload", uploadRouter);
 app.use("/allPics", allPicsRouter);
 // app.use("/deletePic/:imageId", deletePicRouter);
 app.use("/my-images/:userId", myImagesRouter);
+app.use("/check-login", authRefreshRouter);
 
 app.delete("/deletePic/:imageId", async (req, res) => {
   const imageId = parseInt(req.params.imageId);
