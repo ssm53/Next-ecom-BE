@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
       email: data.email,
     },
   });
-
+  // so these parts is the start of the issue. other errors are ok
   if (!user)
     return res.status(401).send({
       error: "Email address or password not valid",
