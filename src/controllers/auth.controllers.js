@@ -4,7 +4,7 @@ import { Prisma } from "@prisma/client";
 import prisma from "../utils/prisma.js";
 import { validateLogin } from "../validators/auth.js";
 import { filter } from "../utils/common.js";
-import { signAccessToken } from "../utils/jwt.js";
+import { signAccessToken, signRefreshToken } from "../utils/jwt.js";
 
 const router = express.Router();
 
@@ -37,8 +37,20 @@ router.post("/", async (req, res) => {
 
   const userFiltered = filter(user, "id", "name", "email");
   const accessToken = await signAccessToken(userFiltered);
+  const refreshToken = await signRefreshToken(userFiltered);
+
+  // Update the user's refreshToken in the database
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      refreshToken,
+    },
+  });
+
   const userId = user.id;
-  return res.json({ accessToken, userId });
+  return res.json({ accessToken, refreshToken, userId });
 });
 
 export default router;

@@ -1,32 +1,37 @@
-// Import necessary modules and dependencies
 import express from "express";
-import jwt from "jsonwebtoken";
-const accessTokenSecret = process.env.APP_SECRET;
+import bcrypt from "bcryptjs";
+import { Prisma } from "@prisma/client";
+import prisma from "../utils/prisma.js";
+import { validateLogin } from "../validators/auth.js";
+import { filter } from "../utils/common.js";
+import { signAccessToken, signRefreshToken } from "../utils/jwt.js";
+import { verifyRefreshToken } from "../utils/jwt.js";
 
 const router = express.Router();
 
-// Middleware to verify JWT token
-const verifyToken = (req, res, next) => {
-  const token = req.header("Authorization");
+router.post("/authRefresh", async (req, res) => {
+  const data = req.body;
+  const refreshToken = data.refreshToken;
+  const userId = parseInt(data.user); // Convert userId to an integer if it's in string format
 
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+  // here we want to check if the users refreshtoken is null, so for that in our request, we need to send user in te body in our is loggedin function in the frontend. we also need to send the refreshtoken in our body
+  // now next is check if the user's refresh token is not the same as our refreshtoken variable here, we return res.sendstatus(403)
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!user) {
+    return res.sendStatus(401); // User with the given userId does not exist
+  } else if (!user.refreshToken) {
+    return res.sendStatus(401); // refreshToken field is null for the user
+  } else if (user.refreshToken !== refreshToken) {
+    return res.sendStatus(403); // refreshToken does not match the user's refreshToken
   }
 
-  jwt.verify(token, accessTokenSecret, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
+  const verification = await verifyRefreshToken();
 
-    req.user = decoded.payload; // Store user information in the request object
-    next();
-  });
-};
-
-// Endpoint to check if the user is logged in
-router.get("/", verifyToken, (req, res) => {
-  // If the middleware passed, the user is logged in
-  res.json({ loggedIn: true });
+  // if all pass, then we verify our refreshtoken
 });
-
-export default router;
