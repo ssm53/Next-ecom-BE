@@ -26,10 +26,10 @@ app.use("/allPics", allPicsRouter);
 app.use("/my-images/:userId", myImagesRouter);
 app.use("/check-login", authRefreshRouter);
 
-app.delete("/deletePic/:imageId", async (req, res) => {
+app.delete("/deletePic/:imageId", auth, async (req, res) => {
   const imageId = parseInt(req.params.imageId);
-  console.log(imageId);
-  console.log(typeof imageId);
+  // console.log(imageId);
+  // console.log(typeof imageId);
   // but this below doesnt work to get userid
   // const userId = req.user.payload.id; // Get the ID of the authenticated user
   // console.log(userId);
@@ -52,7 +52,7 @@ app.delete("/deletePic/:imageId", async (req, res) => {
       },
     });
 
-    console.log(image);
+    // console.log(image);
 
     if (!image) {
       // If the image doesn't exist or doesn't belong to the user, return a 404 error
