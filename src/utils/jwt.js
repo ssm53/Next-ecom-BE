@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import "dotenv/config";
+
 const accessTokenSecret = process.env.APP_SECRET;
 const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
 
@@ -7,7 +9,7 @@ export function signAccessToken(payload) {
     jwt.sign(
       { payload },
       accessTokenSecret,
-      { expiresIn: "15s" },
+      { expiresIn: "3600s" },
       (err, token) => {
         if (err) {
           reject("Something went wrong");
@@ -44,7 +46,6 @@ export function signRefreshToken(payload) {
   });
 }
 
-
 export function verifyRefreshToken(token) {
   return new Promise((resolve, reject) => {
     jwt.verify(token, refreshTokenSecret, (err, payload) => {
@@ -72,14 +73,15 @@ export function verifyRefreshToken(token) {
 
 // things to note
 // ah so yeah, if im not mistaken, if someone has our accesstoken, they can always login into our page, but they cant do jackshit in it. this is because for shits which matter, we will add an auth to it, and for the auth part, they will need to verify their tokens and shit! haha then the hackers wont have access to that anymore
+// after logging out, they should go to login page, and not automatically get loggedin, cause when we crate user, we are not setting anything in localstorage.. if we did allow them to login straight, they wont have token, and thus isloggedin cant track it!
+// when logging out, we dont set local storage to be empty auth. we keep the userid there... this is so that if someone logs out, we can conncet our isloggedin to the authrefresh endpoint using the userid in local storage
 
-// to-do
 // 1.
 // lets create new field refreshTokens for user table. it must be unique and can be null
 // now when we create a refreshtoken in our auth endpoint(aka when we login), we want to push this refreshToken to the database as the refreshtoken for that user.. note, refreshtoken can be null or be of anothervalue. (DONE)
 
-// next up
-// our is loggedin endpoint
+// 2.
+// our is loggedin frontend function (DONE)
 
-// later
-// if a user doesnt logout, the refresh token will always be there
+// 3.
+// create endpoint for logout, so that when user logs out, the refreshtoken gets deleted from their database (DONE)

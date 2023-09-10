@@ -8,6 +8,8 @@ import allPicsRouter from "./src/controllers/allPics.controllers.js";
 import stripeRouter from "./src/controllers/stripe.controllers.js";
 // import deletePicRouter from "./src/controllers/deletePic.controllers.js";
 import myImagesRouter from "./src/controllers/myImages.controller.js";
+import authRefreshRouter from "./src/controllers/authRefresh.controllers.js";
+import logoutRouter from "./src/controllers/logout.controllers.js";
 import morgan from "morgan";
 import auth from "./src/middlewares/auth.js"; // tesing DELETE
 
@@ -23,7 +25,8 @@ app.use("/upload", uploadRouter);
 app.use("/allPics", allPicsRouter);
 // app.use("/deletePic/:imageId", deletePicRouter);
 app.use("/my-images/:userId", myImagesRouter);
-
+app.use("/authRefresh", authRefreshRouter);
+app.use("/logout", logoutRouter);
 
 // we do deletepic api here is because that's the only we could get imageId to work. This ie because we worked with params here
 app.delete("/deletePic/:imageId", auth, async (req, res) => {
