@@ -37,7 +37,7 @@ export function verifyAccessToken(token) {
 
 export function signRefreshToken(payload) {
   return new Promise((resolve, reject) => {
-    jwt.sign({ payload }, accessTokenSecret, {}, (err, token) => {
+    jwt.sign({ payload }, refreshTokenSecret, {}, (err, token) => {
       if (err) {
         reject("Something went wrong");
       }
