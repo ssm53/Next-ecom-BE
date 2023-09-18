@@ -7,7 +7,7 @@ import uploadRouter from "./src/controllers/upload.controllers.js";
 import allPicsRouter from "./src/controllers/allPics.controllers.js";
 import stripeRouter from "./src/controllers/stripe.controllers.js";
 // import deletePicRouter from "./src/controllers/deletePic.controllers.js";
-import myImagesRouter from "./src/controllers/myImages.controller.js";
+// import myImagesRouter from "./src/controllers/myImages.controller.js";
 import authRefreshRouter from "./src/controllers/authRefresh.controllers.js";
 import logoutRouter from "./src/controllers/logout.controllers.js";
 import morgan from "morgan";
@@ -24,7 +24,7 @@ app.use("/auth", authRouter);
 app.use("/upload", uploadRouter);
 app.use("/allPics", allPicsRouter);
 // app.use("/deletePic/:imageId", deletePicRouter);
-app.use("/my-images/:userId", myImagesRouter);
+// app.use("/my-images/:userId", myImagesRouter);
 app.use("/authRefresh", authRefreshRouter);
 app.use("/logout", logoutRouter);
 
@@ -73,6 +73,34 @@ app.delete("/deletePic/:imageId", auth, async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// myImages endpoint
+// Define a new route to get images by user ID
+app.get("/my-images/:userId", async (req, res) => {
+  const userId = parseInt(req.params.userId); // Parse userId from the URL parameter
+  // let userId = req.params;
+  console.log(userId);
+  console.log(typeof userId);
+
+  try {
+    // Use Prisma to find images owned by the specified user
+    const myImages = await prisma.image.findMany({
+      where: {
+        ownerID: userId,
+      },
+    });
+
+    // let userid = myImages[0].ownerID;
+    // console.log(userid);
+
+    // Return the images as JSON response
+    return res.json({ myImages, userId }); // added user: for redirect.. place change to userid if needed
+  } catch (error) {
+    // Handle errors and return an error response if needed
+    console.error("Error retrieving images:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

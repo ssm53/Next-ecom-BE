@@ -1,32 +1,32 @@
 // const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
 import "dotenv/config";
 import express from "express";
-import bcrypt from "bcryptjs";
-import { Prisma } from "@prisma/client";
 import prisma from "../utils/prisma.js";
-import { validateLogin } from "../validators/auth.js";
 import { filter } from "../utils/common.js";
-import { signAccessToken, signRefreshToken } from "../utils/jwt.js";
-import { verifyRefreshToken } from "../utils/jwt.js";
-import jwt from "jsonwebtoken";
+import { signAccessToken } from "../utils/jwt.js";
 
 const router = express.Router();
 
 router.post("/", async (req, res) => {
   console.log("hello1");
   const data = req.body;
+  console.log(req);
   console.log(data);
   const refreshToken = data.refreshToken;
   const userId = parseInt(data.user);
+  if (!userId) {
+    return res.status(402).send({
+      error: {
+        authentication: "no id provided",
+      },
+    });
+  }
 
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
     },
   });
-
-  const userFiltered = filter(user, "id", "name", "email");
-  const accessToken = await signAccessToken(userFiltered);
 
   if (!user) {
     console.log("hello2");
@@ -45,6 +45,8 @@ router.post("/", async (req, res) => {
       .json({ error: "refreshToken does not match the user's refreshToken" });
   } else if (user.refreshToken == refreshToken) {
     // we should user jwt.verify here, but it doesnt work la!
+    const userFiltered = filter(user, "id", "name", "email");
+    const accessToken = await signAccessToken(userFiltered);
     return res.json({ accessToken, refreshToken, userId });
   }
 });

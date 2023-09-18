@@ -9,7 +9,7 @@ const router = express.Router();
 
 // put api key in .env.dev
 const stripe = new Stripe(
-  "sk_test_51NnLAPAKnGY6vzrgNETVXXtznJjh7nxMzjLQOXUJJS0wSsfphySF4cdHkgeUhjyf5EcLFoIymS45NAphBxXcTSqr00KXJ6OycN"
+  process.env.STRIPE_KEY
 );
 
 router.post("/", async (req, res) => {
