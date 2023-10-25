@@ -8,9 +8,7 @@ import { filter } from "../utils/common.js";
 const router = express.Router();
 
 // put api key in .env.dev
-const stripe = new Stripe(
-  process.env.STRIPE_KEY
-);
+const stripe = new Stripe(process.env.STRIPE_KEY);
 
 router.post("/", async (req, res) => {
   const id = req.body;
@@ -37,8 +35,8 @@ router.post("/", async (req, res) => {
       },
     ],
     mode: "payment",
-    success_url: "http://localhost:5173/",
-    cancel_url: `http://localhost:5173/failure`,
+    success_url: "https://next-ecomm-fe.pages.dev/",
+    cancel_url: `https://next-ecomm-fe.pages.dev/failure`,
   });
   return res.json(session.url);
 });
